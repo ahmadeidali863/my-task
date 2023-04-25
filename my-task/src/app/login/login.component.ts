@@ -23,7 +23,6 @@ export class LoginComponent implements OnInit {
   password: string = '';
   errorMessage: string = '';
   private loginService =inject(LoginService) ;
-  private router=inject(Router);
   private activatedRoute =inject(ActivatedRoute);
   constructor() {
   }
