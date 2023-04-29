@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
       this.layoutname = '';
       this.layoutComponent = DefaultLayoutComponent;
     }else if(this.layoutname == 'CustomLayoutComponent'){
-      this.layoutComponent = CustomLayoutComponent;
+      //this.layoutComponent = CustomLayoutComponent;
     }
     
 }
