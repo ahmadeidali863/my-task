@@ -1,14 +1,12 @@
-import { Component, ElementRef, OnDestroy, OnInit, Renderer2, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, Renderer2, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
-import { LayoutService } from '../services/layout.service';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @Component({
   standalone:true,
-  imports:[CommonModule,HttpClientModule],
+  imports:[CommonModule,HttpClientModule,RouterModule],
   selector: 'app-default-layout',
   templateUrl: './default-layout.component.html',
   styleUrls: ['./default-layout.component.scss']
@@ -48,42 +46,59 @@ export class DefaultLayoutComponent implements OnInit, OnDestroy {
 //       this.layoutSubscription.unsubscribe();
 //     }
  // }
-  ngOnDestroy() {
-    this.removeCssLink();
-  }
+ private scssSubscription: Subscription = new Subscription();
+ private htmlSubscription: Subscription = new Subscription();
+ private routeSubscription: Subscription = new Subscription();
+
+  route = inject(ActivatedRoute) ;
+  renderer = inject(Renderer2) ;
+  http = inject(HttpClient) ;
+
 html: string ='';
 cssUrl: string = '';
 fileName: string = '';
-  constructor(
-    private route: ActivatedRoute,
-    private elRef: ElementRef,
-    private renderer: Renderer2,
-     private http: HttpClient) {}
+
+  constructor() {}
+  
+  ngOnDestroy(): void {
+    this.htmlSubscription.unsubscribe();
+    this.scssSubscription.unsubscribe();
+    this.routeSubscription.unsubscribe();
+  }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
+   this.routeSubscription = this.route.params.subscribe(params => {
       this.fileName = params['layout'];
-      this.http.get(`/assets/html/${this.fileName}.html`, { responseType: 'text' })
-        .subscribe(html => {
-          this.html = html;
-          this.addCssLink();
+      this.htmlSubscription = this.http.get(`/assets/html/${this.fileName}.html`, { responseType: 'text' })
+        .subscribe({
+        next: html => {
+        this.html = html;
+        },
+        error: err => {
+          console.error(`Failed to load layout ${this.fileName}: ${err.message}`);
+        },
+        complete: () => {
+          console.log(`Page with layout ${this.fileName} : ${this.html}`);
+        }
+      });
         });
+
+    const style = this.renderer.createElement('style');
+    style.type = 'text/css';
+    this.scssSubscription = this.http.get(`/assets/scss/${this.fileName}.scss`, { responseType: 'text' })
+    .subscribe({
+      next: scss => {
+        style.innerHTML = `${scss}`;
+      },
+      error: err => {
+        console.error(`Failed to load layout ${this.fileName}: ${err.message}`);
+      },
+      complete: () => {
+        console.log(`Page with layout ${this.fileName} : ${style.innerHTML}`);
+      }
     });
+    this.renderer.appendChild(document.head, style);
+  
   }
 
-  private addCssLink() {
-    this.cssUrl = `/assets/scss/${this.fileName}.scss`;
-    const link = this.renderer.createElement('link');
-    this.renderer.setAttribute(link, 'rel', 'stylesheet');
-    this.renderer.setAttribute(link, 'type', 'text/css');
-    this.renderer.setAttribute(link, 'href', this.cssUrl);
-    this.renderer.appendChild(this.elRef.nativeElement.ownerDocument.head, link);
-  }
-
-  private removeCssLink() {
-    const link = this.elRef.nativeElement.ownerDocument.head.querySelector(`link[href="${this.cssUrl}"]`);
-    if (link) {
-      this.renderer.removeChild(this.elRef.nativeElement.ownerDocument.head, link);
-    }
-  }
 }

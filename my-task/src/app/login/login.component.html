@@ -1,4 +1,4 @@
-<ng-container *ngIf="this.layoutname == '' ; else layout">
+<ng-container *ngIf="!this.layoutnamebol ; else layout">
 <form #loginfrm="ngForm" class="loginInput" >
     <div class="messInput ">
         <div class="digitalLabel">
@@ -48,5 +48,5 @@
 </form>
 </ng-container>
  <ng-template #layout>
-    <div *ngComponentOutlet="layoutComponent" ></div>
+  <div [innerHTML]="html" ></div>
  </ng-template>

@@ -1,1 +1,11 @@
-<p> layout one works</p>>
+
+<div class="wrapper" #loginfrm="ngForm" (ngSubmit)="submit()">
+    <form class="form-signin" >       
+      <h2 class="form-signin-heading">Please login</h2>
+      <input type="text" class="form-control" name="username"  [(ngModel)]="username" placeholder="Email Address" required="" autofocus="" />
+      <input type="password" class="form-control" name="password"  [(ngModel)]="password" placeholder="Password" required=""/>      
+      <input type="submit"class="btn btn-lg btn-primary btn-block" placeholder="submit"/>      
+      <button type="submit"  class="btn btn-lg btn-primary btn-block"(input)="submit()" >Login</button>
+    </form>
+    <p>This is some <strong>HTML</strong> code</p><input type="text" placeholder="Enter some text">
+  </div>

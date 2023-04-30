@@ -1,3 +1,55 @@
+<!-- <ng-container *ngIf="this.layoutname == '' ; else layout">
+    <form #loginfrm="ngForm" class="loginInput" >
+        <div class="messInput ">
+            <div class="digitalLabel">
+              User name :
+            </div>
+            <div class="input">
+              <input type="text" class="digitalInputBox" [(ngModel)]="username" title="username"
+                     id="userName" ngModel #userName="ngModel" required name="userName" minlength="1" maxlength="50"
+                     [ngStyle]="{'border-color': (userName?.touched && userName?.invalid) ? 'var(--color)' : '' }"
+                     placeholder="Title" />
+              <span *ngIf="userName?.touched && userName?.invalid" class="row" style="padding: 2px 10px 10px 10px;">
+                <span class="text-danger" *ngIf="userName?.touched && userName?.invalid">
+                  Please insert a valid user name.
+                </span>
+                <span class="text-danger" *ngIf="username.length <= 1 || username.length >= 50">
+                  user name is required
+                </span>
+              </span>
+            </div>
+            <div class="digitalLabel">
+              password :
+            </div>
+            <div class="input">
+              <input type="{{ showPassword ? 'text' : 'password' }}" class="digitalInputBox" [(ngModel)]="password" title="password"
+                        pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$"
+                        id="passWord" ngModel #passWord="ngModel" required name="passWord" minlength="1"
+                        [ngStyle]="{'border-color': (passWord?.touched && passWord?.invalid) ? 'var(--color)' : '' }"
+                        placeholder="password">
+              <span *ngIf="passWord?.touched && passWord?.invalid" class="row" style="padding: 2px 10px 10px 10px;">
+                <span class="text-danger" *ngIf="passWord?.touched && passWord?.invalid">
+                  Please Insert a valid  password.
+                </span>
+                <span class="text-danger" *ngIf="password.length <= 1">
+                  Password is required
+                </span>
+              </span>
+            </div>
+            <input type="checkbox" name="showPassword" [(ngModel)]="showPassword" /> Show password
+            <div></div>
+            <div class="digitalbutton">
+              <button type="button" class="digitalbuttonadd" (click)="onSubmit(loginfrm)">
+                <i class="fa-solid fa-check"></i>
+                Login
+              </button>
+            </div>
+          </div>
+    </form>
+    </ng-container>
+     <ng-template #layout>
+        <div *ngComponentOutlet="layoutComponent" ></div>
+     </ng-template>
+     -->
 <p>default page</p>
-
-<div [innerHTML]="html"></div>
+<div [innerHTML]="html" ></div>
